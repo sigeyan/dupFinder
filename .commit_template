@@ -1,0 +1,17 @@
+# :sparkles:         feat
+# :bug:              fix
+# :scroll:           docs
+# :pushpin:          style
+# :recycle:          refactor
+# :heavy_check_mark: test
+# :green_heart:      chore
+
+# type  
+# - feat: A new feature
+# - fix: A bug fix
+# - docs: Documentation only changes [ci skip]
+# - style: Changes that do no affect the meaning of the code(white-space,formatting,missing semi-- colons,etc)
+# - refactor: A code change that neither fixes a bug or add a feature
+# - test: Adding missing tests
+# - chore: Changes to the build process or auxiliary tools and libraries such as documentation  generation
+
