@@ -8,7 +8,74 @@ https://www.pythoncentral.io/finding-duplicate-files-with-python/
 # dupFinder.py
 import os, sys
 import hashlib
- 
+from PyQt5.QtCore import QDir, Qt
+from PyQt5.QtGui import QImage, QPainter, QPalette, QPixmap
+from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
+        QMainWindow, QMenu, QMessageBox, QScrollArea, QSizePolicy)
+from PyQt5.QtPrintSupport import QPrintDialog, QPrinter
+
+class DupFinder(QMainWindow):
+    def __init__(self):
+        super(DupFinder, self).__init__()
+
+        self.createActions()
+        self.createMenus()
+
+        self.setWindowTitle("Image Viewer")
+        self.resize(500, 400)
+    
+    def open(self):
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open File",
+                QDir.currentPath())
+        if fileName:
+
+    def about(self):
+        QMessageBox.about(self, "About Dupplicate Finder",
+                "<p>The <b>Dupplicate Finder</b> example shows how to combine "
+                "QLabel and QScrollArea to display an image. QLabel is "
+                "typically used for displaying text, but it can also display "
+                "an image. QScrollArea provides a scrolling view around "
+                "another widget. If the child widget exceeds the size of the "
+                "frame, QScrollArea automatically provides scroll bars.</p>"
+                "<p>The example demonstrates how QLabel's ability to scale "
+                "its contents (QLabel.scaledContents), and QScrollArea's "
+                "ability to automatically resize its contents "
+                "(QScrollArea.widgetResizable), can be used to implement "
+                "zooming and scaling features.</p>"
+                "<p>In addition the example shows how to use QPainter to "
+                "print an image.</p>")
+
+    def createActions(self):
+        self.openAct = QAction("&Open...", self, shortcut="Ctrl+O",
+                triggered=self.open)
+
+        self.exitAct = QAction("E&xit", self, shortcut="Ctrl+Q",
+                triggered=self.close)
+        self.aboutAct = QAction("&About", self, triggered=self.about)
+
+        self.aboutQtAct = QAction("About &Qt", self,
+                triggered=QApplication.instance().aboutQt)
+    def createMenus(self):
+        self.fileMenu = QMenu("&File", self)
+        self.fileMenu.addAction(self.openAct)
+        self.fileMenu.addSeparator()
+        self.fileMenu.addAction(self.exitAct)
+
+        self.viewMenu = QMenu("&View", self)
+        self.viewMenu.addAction(self.zoomInAct)
+        self.viewMenu.addAction(self.zoomOutAct)
+        self.viewMenu.addAction(self.normalSizeAct)
+        self.viewMenu.addSeparator()
+        self.viewMenu.addAction(self.fitToWindowAct)
+
+        self.helpMenu = QMenu("&Help", self)
+        self.helpMenu.addAction(self.aboutAct)
+        self.helpMenu.addAction(self.aboutQtAct)
+
+        self.menuBar().addMenu(self.fileMenu)
+        self.menuBar().addMenu(self.viewMenu)
+        self.menuBar().addMenu(self.helpMenu)
+
 def findDup(parentFolder):
     # Dups in format {hash:[names]}
     dups = {}
@@ -63,6 +130,7 @@ def printResults(dict1):
  
  
 if __name__ == '__main__':
+#'Usage: python dupFinder.py folder or python dupFinder.py folder1 folder2 folder3')
     if len(sys.argv) > 1:
         dups = {}
         folders = sys.argv[1:]
@@ -76,5 +144,7 @@ if __name__ == '__main__':
                 sys.exit()
         printResults(dups)
     else:
-        print('Usage: python dupFinder.py folder or python dupFinder.py folder1 folder2 folder3')
-
+        app = QApplication(sys.argv)
+        DF = DupFinder()
+        DF.show()
+        sys.exit(app.exec_())
